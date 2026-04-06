@@ -95,34 +95,76 @@
             </section>
 
             <section id="daily-log-view" class="view-section" style="display: none;">
-                <div class="dashboard-container">
-                    <div class="score-display">
-                        <h1 id="current-burn-score">50</h1>
-                        <p id="risk-level">Risk: MODERATE</p>
+                <div class="dashboard-container wizard-container">
+                    
+                    <div class="wizard-step active-step" id="step-1">
+                        <h2>Physical Activity</h2>
+                        <div class="input-group">
+                            <label>Steps Taken Today</label>
+                            <input type="number" id="steps-input" placeholder="e.g., 8500">
+                        </div>
+                        <div class="input-group">
+                            <label>Resting Heart Rate (bpm)</label>
+                            <input type="number" id="hr-input" placeholder="e.g., 65">
+                        </div>
+                        <button class="btn primary full-width" onclick="nextStep(2)">Next</button>
                     </div>
-                    <hr>
-                    <div class="sliders-grid">
-                        <div class="slider-group">
-                            <label>Mood (1-10)</label>
-                            <input type="range" id="mood-slider" min="1" max="10" value="7">
-                            <span id="mood-value" class="slider-value">7</span>
+
+                    <div class="wizard-step" id="step-2" style="display: none;">
+                        <h2>Rest & Strain</h2>
+                        <div class="slider-group" style="flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <label style="width: 100%; margin-bottom: 10px;">Sleep (Hours): <span id="sleep-value">7</span></label>
+                            <input type="range" id="sleep-slider" min="0" max="12" value="7" oninput="document.getElementById('sleep-value').innerText=this.value">
                         </div>
-                        <div class="slider-group">
-                            <label>Sleep (Hours)</label>
-                            <input type="range" id="sleep-slider" min="0" max="12" value="7">
-                            <span id="sleep-value" class="slider-value">7</span>
+                        <div class="slider-group" style="flex-direction: column; align-items: flex-start;">
+                            <label style="width: 100%; margin-bottom: 10px;">Screen Time (Hours): <span id="screen-value">5</span></label>
+                            <input type="range" id="screen-slider" min="0" max="18" value="5" oninput="document.getElementById('screen-value').innerText=this.value">
                         </div>
-                        <div class="slider-group">
-                            <label>Stress (1-10)</label>
-                            <input type="range" id="stress-slider" min="1" max="10" value="3">
-                            <span id="stress-value" class="slider-value">3</span>
-                        </div>
-                        <div class="slider-group">
-                            <label>Social (1-10)</label>
-                            <input type="range" id="social-slider" min="1" max="10" value="6">
-                            <span id="social-value" class="slider-value">6</span>
+                        <div class="button-group" style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button class="btn secondary full-width" onclick="nextStep(1)">Back</button>
+                            <button class="btn primary full-width" onclick="nextStep(3)">Next</button>
                         </div>
                     </div>
+
+                    <div class="wizard-step" id="step-3" style="display: none;">
+                        <h2>Mental State</h2>
+                        <div class="slider-group" style="flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <label style="width: 100%; margin-bottom: 10px;">Stress Level (1-10): <span id="stress-value">5</span></label>
+                            <input type="range" id="stress-slider" min="1" max="10" value="5" oninput="document.getElementById('stress-value').innerText=this.value">
+                        </div>
+                        <div class="slider-group" style="flex-direction: column; align-items: flex-start;">
+                            <label style="width: 100%; margin-bottom: 10px;">Socialization (1-10): <span id="social-value">5</span></label>
+                            <input type="range" id="social-slider" min="1" max="10" value="5" oninput="document.getElementById('social-value').innerText=this.value">
+                        </div>
+                        <div class="button-group" style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button class="btn secondary full-width" onclick="nextStep(2)">Back</button>
+                            <button class="btn primary full-width" onclick="nextStep(4)">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" id="step-4" style="display: none;">
+                        <h2>What's causing stress?</h2>
+                        <p style="color: #aaa; font-size: 14px; margin-top: 0;">Select all that apply today.</p>
+                        
+                        <div class="tags-container" id="stress-tags">
+                            </div>
+
+                        <div class="button-group" style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button class="btn secondary full-width" onclick="nextStep(3)">Back</button>
+                            <button class="btn primary full-width" onclick="submitDailyLog()">Calculate Score</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" id="step-5" style="display: none;">
+                        <div class="score-display">
+                            <h2 style="color: #ccc; margin-bottom: 0;">Your Daily BurnScore</h2>
+                            <h1 id="current-burn-score" style="font-size: 80px; margin: 10px 0;">--</h1>
+                            <p id="risk-level">Risk: PENDING</p>
+                        </div>
+                        <hr>
+                        <button class="btn secondary full-width" onclick="switchView('dashboard-view'); nextStep(1);">Return to Dashboard</button>
+                    </div>
+
                 </div>
             </section>
 
