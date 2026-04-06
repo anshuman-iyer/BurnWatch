@@ -92,3 +92,59 @@ input[type=range] { width: 100%; margin: 0 10px; }
 
 /* Profile Card */
 .profile-card { background-color: #1e1e24; padding: 20px; border-radius: 12px; border: 1px solid #333; max-width: 400px; line-height: 1.8; }
+
+/* Daily Log Wizard Styling */
+.wizard-container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wizard-step {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stress Tag Chips */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tag-chip {
+    background-color: #2a2a32;
+    border: 1px solid #444;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.tag-chip:hover {
+    border-color: #666;
+}
+
+.tag-chip.active {
+    background-color: #F44336; /* Red indicates stress contribution */
+    color: white;
+    border-color: #F44336;
+    box-shadow: 0px 0px 10px rgba(244, 67, 54, 0.3);
+}
+
+/* Make text inputs match the design */
+input[type="number"] {
+    width: 100%; padding: 12px; border-radius: 6px;
+    border: 1px solid #444; background-color: #2a2a32; color: white;
+    box-sizing: border-box; font-family: inherit;
+}
+input[type="number"]:focus { outline: none; border-color: #4CAF50; }
