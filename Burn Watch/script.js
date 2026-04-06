@@ -1,143 +1,52 @@
-// Grab the Welcome Screen elements
+// --- 1. WELCOME SCREEN LOGIC ---
 const welcomeScreen = document.getElementById('welcome-screen');
 const getStartedBtn = document.getElementById('get-started-btn');
+const baselineModal = document.getElementById('baseline-modal');
+
+// Input Elements
 const userNameInput = document.getElementById('user-name');
+const userSexInput = document.getElementById('user-sex');
+const userRoleInput = document.getElementById('user-role');
+const userPersonalityInput = document.getElementById('personality-slider');
 
-// When the user clicks "Get Started"
+// Display Elements
+const dashName = document.getElementById('dash-name');
+const profileNameDisplay = document.getElementById('profile-name-display');
+const profileSexDisplay = document.getElementById('profile-sex-display');
+const profileRoleDisplay = document.getElementById('profile-role-display');
+const profilePersonalityDisplay = document.getElementById('profile-personality-display');
+
 getStartedBtn.addEventListener('click', function() {
-    // 1. Get what the user typed in the name box
-    let userName = userNameInput.value;
-    
-    // If they left it blank, default to "User"
-    if (userName.trim() === "") {
-        userName = "User";
-    }
+    let name = userNameInput.value.trim();
+    if (name === "") name = "User";
 
-    // 2. Hide the Welcome Screen
+    // Populate the Dashboard and Profile
+    dashName.innerText = name;
+    profileNameDisplay.innerText = name;
+    profileSexDisplay.innerText = userSexInput.value;
+    profileRoleDisplay.innerText = userRoleInput.value;
+    profilePersonalityDisplay.innerText = userPersonalityInput.value;
+
+    // Hide Welcome, Show Baseline Modal
     welcomeScreen.style.display = 'none';
-
-    // 3. Welcome them and prompt the Baseline assessment
-    alert(`Welcome to BurnWatch, ${userName}! Let's set up your baseline parameters.`);
-    
-    // If you have the baseline modal from the previous step, 
-    // make sure it is set to display='flex' here so it pops up next!
+    baselineModal.style.display = 'flex';
 });
 
-
-// 1. Grab the HTML elements so we can control them
-const verificationModal = document.getElementById('verification-modal');
-const confirmBtn = document.getElementById('confirm-btn');
-const editBtn = document.getElementById('edit-btn');
-
-// 2. Logic for the Verification Prompt
-confirmBtn.addEventListener('click', function() {
-    // When the user clicks confirm, show a success message
-    alert("User Verified: Estimate Confirmed +0.1!");
+// --- 2. NAVIGATION LOGIC ---
+function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(view => {
+        view.style.display = 'none';
+    });
     
-    // Hide the popup modal
-    verificationModal.style.display = 'none';
-});
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-editBtn.addEventListener('click', function() {
-    // If they want to edit, you would normally redirect them to the log screen
-    alert("Opening manual log screen to adjust the 68 score...");
-    verificationModal.style.display = 'none';
-});
-
-// 3. Logic for the Feedback Buttons
-function submitFeedback(status) {
-    if (status === 'helpful') {
-        alert("Thanks! We'll prioritize this suggestion in the future.");
-    } else {
-        alert("Noted. We'll adjust your future recovery suggestions.");
-    }
-}
-// 1. Grab all the slider elements
-const moodSlider = document.getElementById('mood-slider');
-const sleepSlider = document.getElementById('sleep-slider');
-const stressSlider = document.getElementById('stress-slider');
-const socialSlider = document.getElementById('social-slider');
-
-// Grab the text elements that display the values
-const moodValue = document.getElementById('mood-value');
-const sleepValue = document.getElementById('sleep-value');
-const stressValue = document.getElementById('stress-value');
-const socialValue = document.getElementById('social-value');
-
-// Grab the main Score and Risk displays
-const scoreDisplay = document.getElementById('current-burn-score');
-const riskDisplay = document.getElementById('risk-level');
-
-// 2. Put all sliders into an array so we can easily loop through them
-const allSliders = [moodSlider, sleepSlider, stressSlider, socialSlider];
-
-// 3. The Core Calculation Function
-function calculateBurnScore() {
-    // Get the current numbers from the sliders and convert them to integers
-    let mood = parseInt(moodSlider.value);
-    let sleep = parseInt(sleepSlider.value);
-    let stress = parseInt(stressSlider.value);
-    let social = parseInt(socialSlider.value);
-
-    // Update the small numbers next to the sliders
-    moodValue.innerText = mood;
-    sleepValue.innerText = sleep;
-    stressValue.innerText = stress;
-    socialValue.innerText = social;
-
-    // A basic sample algorithm to calculate burnout (0-100)
-    // High stress increases it. High sleep/mood/social decreases it.
-    let score = 50; // Start at a baseline
-    score += (stress * 4);         // Stress is bad
-    score -= (mood * 3);           // Good mood is good
-    score -= ((sleep - 6) * 3);    // Sleep over 6 hours helps
-    score -= (social * 1.5);       // Socializing helps slightly
-
-    // Make sure the score doesn't go below 0 or above 100
-    if (score > 100) score = 100;
-    if (score < 0) score = 0;
-    
-    // Round to a whole number
-    score = Math.round(score);
-
-    // Update the big number on the screen
-    scoreDisplay.innerText = score;
-
-    // Update the colors and risk text [cite: 110, 111, 112]
-    if (score <= 40) {
-        scoreDisplay.style.color = "#4CAF50"; // Green
-        riskDisplay.innerText = "Risk: LOW";
-    } else if (score <= 70) {
-        scoreDisplay.style.color = "#FFC107"; // Yellow
-        riskDisplay.innerText = "Risk: MODERATE";
-    } else {
-        scoreDisplay.style.color = "#F44336"; // Red
-        riskDisplay.innerText = "Risk: HIGH";
-    }
+    document.getElementById(viewId).style.display = 'block';
+    event.currentTarget.classList.add('active');
 }
 
-// 4. Attach an "event listener" to every slider. 
-// Every time a user moves a slider ('input'), run the calculation function.
-allSliders.forEach(slider => {
-    slider.addEventListener('input', calculateBurnScore);
-});
-
-
-
-
-
-
-//-------------------------------------------------------------------
-
-
-
-
-
-
-
-// Run it once when the page loads to set the initial values
-calculateBurnScore();
-// 1. The OLBI Data Structure
+// --- 3. BASELINE (OLBI) LOGIC ---
 const olbiQuestions = [
     { id: 1, text: "I always find new and interesting aspects in my work.", reverse: true },
     { id: 2, text: "There are days when I feel tired before I arrive at work.", reverse: false },
@@ -156,62 +65,51 @@ const olbiQuestions = [
     { id: 15, text: "I feel more and more engaged in my work.", reverse: true },
     { id: 16, text: "When I work, I usually feel energized.", reverse: true }
 ];
-
-// 2. Grab the HTML elements
 const questionsContainer = document.getElementById('olbi-questions-container');
-const submitBaselineBtn = document.getElementById('submit-baseline-btn');
-const baselineModal = document.getElementById('baseline-modal');
 
-// 3. Dynamically Generate the UI Form
-function renderOLBIForm() {
-    olbiQuestions.forEach((q, index) => {
-        // Create a div for each question
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'olbi-question';
-        
-        // Build the inner HTML for the slider
-        // Values map to: 1=Strongly Disagree, 2=Disagree, 3=Agree, 4=Strongly Agree
-        questionDiv.innerHTML = `
-            <p>${q.id}. ${q.text}</p>
-            <input type="range" id="olbi-slider-${index}" min="1" max="4" value="2" step="1" style="width: 100%;">
-            <div class="slider-labels">
-                <span>Strongly Disagree</span>
-                <span>Disagree</span>
-                <span>Agree</span>
-                <span>Strongly Agree</span>
-            </div>
-        `;
-        
-        questionsContainer.appendChild(questionDiv);
-    });
-}
+olbiQuestions.forEach((q, index) => {
+    const div = document.createElement('div');
+    div.className = 'olbi-question';
+    div.innerHTML = `
+        <p>${q.id}. ${q.text}</p>
+        <input type="range" id="olbi-slider-${index}" min="1" max="4" value="2" style="width: 100%;">
+        <div class="slider-labels">
+            <span>Strongly Disagree</span><span>Disagree</span><span>Agree</span><span>Strongly Agree</span>
+        </div>
+    `;
+    questionsContainer.appendChild(div);
+});
 
-// 4. Calculate the Baseline Score
-submitBaselineBtn.addEventListener('click', function() {
-    let totalScore = 0;
-
-    olbiQuestions.forEach((q, index) => {
-        const slider = document.getElementById(`olbi-slider-${index}`);
-        let rawValue = parseInt(slider.value);
-        let finalScore = 0;
-
-        // Apply reverse scoring math if needed
-        if (q.reverse) {
-            // If reverse: 1 becomes 4, 2 becomes 3, 3 becomes 2, 4 becomes 1
-            finalScore = 5 - rawValue;
-        } else {
-            // Standard scoring stays the same
-            finalScore = rawValue;
-        }
-
-        totalScore += finalScore;
-    });
-
-    alert("Baseline Submitted! Your OLBI raw score is: " + totalScore + " out of 64.");
-    
-    // Hide the baseline modal so the user can access the dashboard
+document.getElementById('submit-baseline-btn').addEventListener('click', function() {
+    alert("Baseline Saved! Taking you to the Dashboard.");
     baselineModal.style.display = 'none';
 });
 
-// Run the generation function immediately
-renderOLBIForm();
+// --- 4. DAILY LOG (BURN SCORE) LOGIC ---
+const allSliders = ['mood', 'sleep', 'stress', 'social'].map(id => document.getElementById(`${id}-slider`));
+
+function calculateBurnScore() {
+    let mood = parseInt(document.getElementById('mood-slider').value);
+    let sleep = parseInt(document.getElementById('sleep-slider').value);
+    let stress = parseInt(document.getElementById('stress-slider').value);
+    let social = parseInt(document.getElementById('social-slider').value);
+
+    document.getElementById('mood-value').innerText = mood;
+    document.getElementById('sleep-value').innerText = sleep;
+    document.getElementById('stress-value').innerText = stress;
+    document.getElementById('social-value').innerText = social;
+
+    let score = 50 + (stress * 4) - (mood * 3) - ((sleep - 6) * 3) - (social * 1.5);
+    score = Math.max(0, Math.min(100, Math.round(score)));
+
+    const scoreDisplay = document.getElementById('current-burn-score');
+    const riskDisplay = document.getElementById('risk-level');
+    scoreDisplay.innerText = score;
+
+    if (score <= 40) { scoreDisplay.style.color = "#4CAF50"; riskDisplay.innerText = "Risk: LOW"; }
+    else if (score <= 70) { scoreDisplay.style.color = "#FFC107"; riskDisplay.innerText = "Risk: MODERATE"; }
+    else { scoreDisplay.style.color = "#F44336"; riskDisplay.innerText = "Risk: HIGH"; }
+}
+
+allSliders.forEach(slider => slider.addEventListener('input', calculateBurnScore));
+calculateBurnScore();
