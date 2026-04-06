@@ -1,0 +1,342 @@
+/* General App Styling */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    overflow: hidden; /* Prevents whole page scrolling */
+}
+
+/* Welcome Screen */
+.full-screen-container {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    
+    /* Matches the dashboard gradient exactly */
+    background: linear-gradient(135deg, #1e1233 0%, #0b1120 100%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.brand-title { color: #4CAF50; font-size: 48px; margin-bottom: 5px; }
+.subtitle { color: #aaa; margin-bottom: 30px; font-style: italic; }
+
+/* --- UPDATED LOGIN FORM (Green Glassmorphism) --- */
+.onboarding-form {
+    width: 90%;
+    max-width: 400px;
+    padding: 35px 30px;
+    border-radius: 16px; /* Matches the dashboard cards */
+
+    /* The Green Glass Effect */
+    background: rgba(76, 175, 80, 0.05); /* Soft emerald tint */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* Highlighted Glass Edges */
+    border: 1px solid rgba(76, 175, 80, 0.15);
+    border-top: 1px solid rgba(76, 175, 80, 0.4);
+    border-left: 1px solid rgba(76, 175, 80, 0.2);
+    
+    /* Deep Floating Shadow */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.input-group { 
+    margin-bottom: 20px; 
+    text-align: left; 
+}
+
+.input-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    color: #e0e0e0; 
+    font-weight: bold; 
+    font-size: 14px;
+}
+
+/* Semi-transparent "etched glass" text boxes */
+.input-group input[type="text"], 
+.input-group select {
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 8px;
+    color: white;
+    box-sizing: border-box;
+    
+    /* Dark, see-through background */
+    background: rgba(0, 0, 0, 0.3); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+/* Green glow effect when the user clicks to type */
+.input-group input[type="text"]:focus, 
+.input-group select:focus {
+    outline: none;
+    border: 1px solid rgba(76, 175, 80, 0.6);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.2);
+}
+/* Modals */
+.modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 50;
+}
+
+.modal-content {
+    background-color: #1e1e24; padding: 30px; border-radius: 12px;
+    text-align: center; max-width: 400px; border: 1px solid #333;
+}
+
+.large-modal { max-width: 600px; width: 90%; max-height: 80vh; display: flex; flex-direction: column; }
+.questions-scroll-box { overflow-y: auto; text-align: left; margin-top: 15px; padding-right: 10px; }
+.olbi-question { background-color: #2a2a32; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; margin-top: 5px; }
+
+/* Buttons */
+.btn { padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.primary { background-color: #4CAF50; color: white; }
+.primary:hover { background-color: #45a049; }
+.full-width { width: 100%; margin-top: 10px; }
+
+/* --- UPDATED APP LAYOUT WITH STATIC GRADIENT --- */
+.app-layout { 
+    display: flex; 
+    width: 100vw; 
+    height: 100vh; 
+    overflow: hidden; 
+    
+    /* A deep, static, purple-to-dark-blue gradient */
+    background: linear-gradient(135deg, #1e1233 0%, #0b1120 100%);
+}
+/* This is the animation engine that slowly shifts the colors */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+/* --- UPDATED SIDEBAR STYLING --- */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #1e1e24 0%, #0d0d0d 100%);
+    border-right: 1px solid #333;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; 
+    overflow: hidden; 
+}
+
+/* What it looks like when collapsed */
+.sidebar.collapsed {
+    width: 70px; 
+    padding: 20px 10px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sidebar-brand {
+    color: #4CAF50;
+    margin: 0;
+    font-size: 24px;
+    white-space: nowrap; 
+    transition: opacity 0.3s;
+}
+
+/* Hide the brand name when collapsed */
+.sidebar.collapsed .sidebar-brand {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.toggle-btn:hover { color: #fff; }
+
+/* The pretty divider line between the name and functions */
+.sidebar-divider {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #4CAF50, transparent);
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.nav-menu { list-style: none; padding: 0; width: 100%; }
+
+.nav-btn { 
+    width: 100%; background: none; border: none; color: #aaa; 
+    text-align: left; padding: 15px; font-size: 16px; 
+    cursor: pointer; border-radius: 8px; margin-bottom: 10px;
+    display: flex; align-items: center; 
+}
+
+.nav-btn:hover, .nav-btn.active { background-color: #333; color: white; }
+
+.nav-btn .icon {
+    font-size: 20px;
+    margin-right: 15px;
+    min-width: 25px; 
+    text-align: center;
+}
+
+.nav-text {
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+/* Hide the button text when collapsed */
+.sidebar.collapsed .nav-text {
+    opacity: 0;
+    pointer-events: none;
+}
+/* ------------------------------- */
+/* Main Content */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+/* --- GLASSMORPHISM DASHBOARD CARDS --- */
+.dash-card {
+    /* The Glass Effect */
+    background: rgba(255, 255, 255, 0.03); /* Barely visible white */
+    backdrop-filter: blur(12px);           /* The magic blur */
+    -webkit-backdrop-filter: blur(12px);   /* Safari support */
+
+    /* Lighting and Edges */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);  /* Top highlight */
+    border-left: 1px solid rgba(255, 255, 255, 0.1); /* Left highlight */
+    border-radius: 16px; /* Slightly rounder for a liquid feel */
+
+    /* The 'Pop' Depth */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smoother animation */
+}
+
+/* Hover Effect: Makes the glass glow and lift */
+.dash-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+.dash-card h3 {
+    margin-top: 0;
+    color: white;
+}
+
+.dash-card p {
+    color: #ccc;
+    margin-bottom: 0;
+}
+
+/* Custom Glass styling for the Panic Button */
+.panic-card {
+    background: rgba(244, 67, 54, 0.05); /* Tinted red glass */
+    border: 1px solid rgba(244, 67, 54, 0.2);
+    border-top: 1px solid rgba(244, 67, 54, 0.4);
+}
+
+.panic-card:hover {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.5);
+    box-shadow: 0 15px 40px 0 rgba(244, 67, 54, 0.2); /* Red glow */
+}
+.panic-card h3 {
+    color: #ff6b6b; /* Brighter red text */
+}
+/* ------------------------------------- */
+/* Daily Log Sliders */
+.dashboard-container { background-color: #1e1e24; padding: 30px; border-radius: 16px; max-width: 600px; border: 1px solid #333; }
+.score-display { text-align: center; margin-bottom: 20px; }
+.score-display h1 { font-size: 64px; margin: 0; }
+hr { border: 0; height: 1px; background: #333; margin: 20px 0; }
+.sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.slider-group { display: flex; align-items: center; justify-content: space-between; }
+.slider-group label { font-size: 14px; color: #ccc; width: 100px; }
+input[type=range] { width: 100%; margin: 0 10px; }
+.slider-value { background-color: #333; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
+
+/* Profile Card */
+.profile-card { background-color: #1e1e24; padding: 20px; border-radius: 12px; border: 1px solid #333; max-width: 400px; line-height: 1.8; }
+
+/* Daily Log Wizard Styling */
+.wizard-container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wizard-step {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stress Tag Chips */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tag-chip {
+    background-color: #2a2a32;
+    border: 1px solid #444;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.tag-chip:hover {
+    border-color: #666;
+}
+
+.tag-chip.active {
+    background-color: #F44336; /* Red indicates stress contribution */
+    color: white;
+    border-color: #F44336;
+    box-shadow: 0px 0px 10px rgba(244, 67, 54, 0.3);
+}
+
+/* Make text inputs match the design */
+input[type="number"] {
+    width: 100%; padding: 12px; border-radius: 6px;
+    border: 1px solid #444; background-color: #2a2a32; color: white;
+    box-sizing: border-box; font-family: inherit;
+}
+input[type="number"]:focus { outline: none; border-color: #4CAF50; }
