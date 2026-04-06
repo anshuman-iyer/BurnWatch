@@ -32,18 +32,32 @@ getStartedBtn.addEventListener('click', function() {
     baselineModal.style.display = 'flex';
 });
 
-// --- 2. NAVIGATION LOGIC ---
+// --- NAVIGATION LOGIC ---
 function switchView(viewId) {
+    // Hide all sections
     document.querySelectorAll('.view-section').forEach(view => {
         view.style.display = 'none';
     });
     
+    // Remove 'active' highlight from all sidebar buttons
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
 
+    // Show the section the user clicked
     document.getElementById(viewId).style.display = 'block';
-    event.currentTarget.classList.add('active');
+    
+    // Highlight the sidebar button if it was clicked
+    if (event && event.currentTarget.classList) {
+        if (event.currentTarget.classList.contains('nav-btn')) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    // NEW: If they are opening the Daily Log, wipe it clean first
+    if (viewId === 'daily-log-view') {
+        resetDailyLog();
+    }
 }
 
 // --- 3. BASELINE (OLBI) LOGIC ---
@@ -85,31 +99,128 @@ document.getElementById('submit-baseline-btn').addEventListener('click', functio
     baselineModal.style.display = 'none';
 });
 
-// --- 4. DAILY LOG (BURN SCORE) LOGIC ---
-const allSliders = ['mood', 'sleep', 'stress', 'social'].map(id => document.getElementById(`${id}-slider`));
+// --- 4. DAILY LOG WIZARD & BURNSCORE ENGINE ---
 
-function calculateBurnScore() {
-    let mood = parseInt(document.getElementById('mood-slider').value);
+// Define the stress tags and their algorithmic weights
+const stressReasons = [
+    { id: 'work_deadlines', label: 'Work Deadlines', weight: 4.5 },
+    { id: 'exam_prep', label: 'Exam Prep', weight: 4.5 },
+    { id: 'health_issues', label: 'Health Issues', weight: 4.0 },
+    { id: 'fin_stress', label: 'Financial Stress', weight: 4.0 },
+    { id: 'social_conflict', label: 'Social Conflict', weight: 3.5 },
+    { id: 'loneliness', label: 'Loneliness', weight: 3.5 },
+    { id: 'sleep_debt', label: 'Sleep Debt', weight: 3.5 },
+    { id: 'burnout_fear', label: 'Fear of Burnout', weight: 3.0 },
+    { id: 'poor_diet', label: 'Poor Diet', weight: 2.5 },
+    { id: 'commuting', label: 'Commuting', weight: 2.0 },
+    { id: 'tech_issues', label: 'Tech Issues', weight: 2.0 },
+    { id: 'noisy_env', label: 'Noisy Environment', weight: 1.5 },
+    { id: 'creative_block', label: 'Creative Block', weight: 1.5 },
+    { id: 'bad_weather', label: 'Bad Weather', weight: 1.0 }
+];
+
+// Dynamically generate the tag chips in Step 4
+const tagsContainer = document.getElementById('stress-tags');
+stressReasons.forEach(tag => {
+    const chip = document.createElement('div');
+    chip.className = 'tag-chip';
+    chip.innerText = tag.label;
+    chip.dataset.weight = tag.weight;
+    
+    // Toggle active state on click
+    chip.addEventListener('click', () => {
+        chip.classList.toggle('active');
+    });
+    
+    tagsContainer.appendChild(chip);
+});
+
+// Function to move between wizard steps
+function nextStep(stepNumber) {
+    // Hide all steps
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.style.display = 'none';
+    });
+    // Show target step
+    document.getElementById(`step-${stepNumber}`).style.display = 'block';
+}
+// Function to clear all inputs when the user opens the Daily Log
+function resetDailyLog() {
+    // 1. Clear text inputs
+    document.getElementById('steps-input').value = '';
+    document.getElementById('hr-input').value = '';
+
+    // 2. Reset sliders to their middle/healthy baselines
+    document.getElementById('sleep-slider').value = 7;
+    document.getElementById('sleep-value').innerText = '7';
+
+    document.getElementById('screen-slider').value = 5;
+    document.getElementById('screen-value').innerText = '5';
+
+    document.getElementById('stress-slider').value = 5;
+    document.getElementById('stress-value').innerText = '5';
+
+    document.getElementById('social-slider').value = 5;
+    document.getElementById('social-value').innerText = '5';
+
+    // 3. Unclick all active stress tags
+    document.querySelectorAll('.tag-chip').forEach(chip => {
+        chip.classList.remove('active');
+    });
+
+    // 4. Force the wizard back to Step 1
+    nextStep(1);
+}
+// The Core Math Engine
+function submitDailyLog() {
+    // 1. Gather Data (Provide safe defaults if user leaves it blank)
+    let steps = parseInt(document.getElementById('steps-input').value) || 5000;
+    let hr = parseInt(document.getElementById('hr-input').value) || 65;
     let sleep = parseInt(document.getElementById('sleep-slider').value);
+    let screenTime = parseInt(document.getElementById('screen-slider').value);
     let stress = parseInt(document.getElementById('stress-slider').value);
     let social = parseInt(document.getElementById('social-slider').value);
 
-    document.getElementById('mood-value').innerText = mood;
-    document.getElementById('sleep-value').innerText = sleep;
-    document.getElementById('stress-value').innerText = stress;
-    document.getElementById('social-value').innerText = social;
+    // 2. Calculate Active Tags Weight
+    let totalTagWeight = 0;
+    document.querySelectorAll('.tag-chip.active').forEach(activeChip => {
+        totalTagWeight += parseFloat(activeChip.dataset.weight);
+    });
 
-    let score = 50 + (stress * 4) - (mood * 3) - ((sleep - 6) * 3) - (social * 1.5);
+    // 3. The Algorithm
+    let score = 30; // Base baseline
+    
+    // Applying the normalization math
+    score += (stress * 2.5);                     // High stress spikes score
+    score += ((screenTime - 4) * 1.5);           // 4 hours is neutral
+    score += ((8 - sleep) * 3);                  // 8 hours is neutral, sleep debt hurts
+    score -= (steps / 1000);                     // -1 point per 1000 steps (activity heals)
+    score += ((hr - 65) * 0.3);                  // Elevated resting HR adds slight strain
+    score -= (social * 1.5);                     // Socializing reduces burnout
+    score += totalTagWeight;                     // Add the contextual stress load
+
+    // 4. Bound the score between 0 and 100
     score = Math.max(0, Math.min(100, Math.round(score)));
 
+    // 5. Update UI
     const scoreDisplay = document.getElementById('current-burn-score');
     const riskDisplay = document.getElementById('risk-level');
+    
     scoreDisplay.innerText = score;
 
-    if (score <= 40) { scoreDisplay.style.color = "#4CAF50"; riskDisplay.innerText = "Risk: LOW"; }
-    else if (score <= 70) { scoreDisplay.style.color = "#FFC107"; riskDisplay.innerText = "Risk: MODERATE"; }
-    else { scoreDisplay.style.color = "#F44336"; riskDisplay.innerText = "Risk: HIGH"; }
-}
+    if (score <= 40) { 
+        scoreDisplay.style.color = "#4CAF50"; 
+        riskDisplay.innerText = "Risk: LOW (Optimal)"; 
+    }
+    else if (score <= 70) { 
+        scoreDisplay.style.color = "#FFC107"; 
+        riskDisplay.innerText = "Risk: MODERATE (Monitor)"; 
+    }
+    else { 
+        scoreDisplay.style.color = "#F44336"; 
+        riskDisplay.innerText = "Risk: HIGH (Intervention Needed)"; 
+    }
 
-allSliders.forEach(slider => slider.addEventListener('input', calculateBurnScore));
-calculateBurnScore();
+    // 6. Move to the final results step
+    nextStep(5);
+}
