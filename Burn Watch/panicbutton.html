@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panic Button</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #1a1a2e, #0f0f1a);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Floating Glow Background */
+.glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: #6e8efb;
+    filter: blur(120px);
+    opacity: 0.3;
+    animation: float 6s infinite alternate;
+}
+
+.glow:nth-child(1) { top: 10%; left: 10%; }
+.glow:nth-child(2) { bottom: 10%; right: 10%; background: #ff4e50; }
+
+@keyframes float {
+    from { transform: translateY(0px); }
+    to { transform: translateY(40px); }
+}
+
+/* Glass Container */
+.container {
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(20px);
+    background: rgba(30, 30, 36, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 520px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+}
+
+/* Title */
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #bbb;
+}
+
+/* Options Grid */
+.options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* Fancy Buttons */
+.option-btn {
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.option-btn:hover {
+    transform: translateY(-5px) scale(1.03);
+    background: linear-gradient(45deg, #6e8efb, #4CAF50);
+    box-shadow: 0 5px 20px rgba(110,142,251,0.5);
+}
+
+/* Result Box */
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #444;
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulse Button */
+.panic-main {
+    margin-top: 20px;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: none;
+    font-size: 16px;
+    background: linear-gradient(45deg, #ff4e50, #f00000);
+    color: white;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(255,0,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Glow Effects -->
+<div class="glow"></div>
+<div class="glow"></div>
+
+<div class="container">
+    <h1>🚨 Panic Button</h1>
+    <p>Why are you stressed out?</p>
+
+    <div class="options">
+        <button class="option-btn" onclick="showTip('screen')">📱 Screen Time</button>
+        <button class="option-btn" onclick="showTip('fatigue')">⚡ Fatigue</button>
+        <button class="option-btn" onclick="showTip('sleep')">😴 Poor Sleep</button>
+        <button class="option-btn" onclick="showTip('work')">📋 Work Pressure</button>
+        <button class="option-btn" onclick="showTip('social')">🤝 Social Isolation</button>
+        <button class="option-btn" onclick="showTip('overthinking')">🧠 Overthinking</button>
+    </div>
+
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+function showTip(type) {
+    let message = "";
+
+    switch(type) {
+        case 'screen':
+            message = "📱 Try the 20-20-20 rule. Step away and relax your eyes.";
+            break;
+        case 'fatigue':
+            message = "⚡ Hydrate, stretch, and take a 5-minute break.";
+            break;
+        case 'sleep':
+            message = "😴 Avoid screens and get proper rest tonight.";
+            break;
+        case 'work':
+            message = "📋 Break your work into small tasks. Focus on one step.";
+            break;
+        case 'social':
+            message = "🤝 Call or text someone. Connection reduces stress.";
+            break;
+        case 'overthinking':
+            message = "🧠 Breathe deeply (4-7-8) or write your thoughts down.";
+            break;
+    }
+
+    let resultBox = document.getElementById("result");
+    resultBox.style.display = "block";
+    resultBox.innerHTML = "<strong>💡 Recovery Tip:</strong><br><br>" + message;
+}
+</script>
+
+</body>
+</html>
