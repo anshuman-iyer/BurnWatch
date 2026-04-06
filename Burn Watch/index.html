@@ -61,12 +61,24 @@
 
     <div class="app-layout">
         
-        <aside class="sidebar">
-            <h2 class="sidebar-brand">BurnWatch</h2>
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-brand">BurnWatch</h2>
+                <button id="toggle-sidebar-btn" class="toggle-btn">☰</button>
+            </div>
+            
+            <hr class="sidebar-divider"> 
+
             <ul class="nav-menu">
-                <li><button class="nav-btn active" onclick="switchView('dashboard-view')">Dashboard</button></li>
-                <li><button class="nav-btn" onclick="switchView('daily-log-view')">Daily Log</button></li>
-                <li><button class="nav-btn" onclick="switchView('profile-view')">Profile</button></li>
+                <li><button class="nav-btn active" onclick="switchView('dashboard-view')">
+                    <span class="icon">🏠</span> <span class="nav-text">Dashboard</span>
+                </button></li>
+                <li><button class="nav-btn" onclick="switchView('daily-log-view')">
+                    <span class="icon">📊</span> <span class="nav-text">Daily Log</span>
+                </button></li>
+                <li><button class="nav-btn" onclick="switchView('profile-view')">
+                    <span class="icon">👤</span> <span class="nav-text">Profile</span>
+                </button></li>
             </ul>
         </aside>
 
