@@ -15,29 +15,21 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
 }
 
-/* Floating Glow Background */
+/* Glow Background */
 .glow {
     position: absolute;
     width: 300px;
     height: 300px;
-    background: #6e8efb;
     filter: blur(120px);
     opacity: 0.3;
-    animation: float 6s infinite alternate;
 }
 
-.glow:nth-child(1) { top: 10%; left: 10%; }
-.glow:nth-child(2) { bottom: 10%; right: 10%; background: #ff4e50; }
+.glow.one { background: #6e8efb; top: 10%; left: 10%; }
+.glow.two { background: #ff4e50; bottom: 10%; right: 10%; }
 
-@keyframes float {
-    from { transform: translateY(0px); }
-    to { transform: translateY(40px); }
-}
-
-/* Glass Container */
+/* Container */
 .container {
     position: relative;
     z-index: 2;
@@ -49,28 +41,16 @@ body {
     max-width: 520px;
     text-align: center;
     border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
 
-/* Title */
-h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-
-p {
-    color: #bbb;
-}
-
-/* Options Grid */
+/* Options */
 .options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
-/* Fancy Buttons */
 .option-btn {
     padding: 14px;
     border-radius: 12px;
@@ -79,58 +59,57 @@ p {
     color: white;
     cursor: pointer;
     transition: 0.3s;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
 }
 
 .option-btn:hover {
-    transform: translateY(-5px) scale(1.03);
+    transform: translateY(-5px);
     background: linear-gradient(45deg, #6e8efb, #4CAF50);
-    box-shadow: 0 5px 20px rgba(110,142,251,0.5);
 }
 
-/* Result Box */
+/* Result */
 .result {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 12px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid #444;
-    display: none;
-    animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Pulse Button */
-.panic-main {
     margin-top: 20px;
-    padding: 15px 25px;
-    border-radius: 50px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.4);
+    display: none;
+}
+
+/* Feedback */
+.feedback-box {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    display: none;
+}
+
+.feedback-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.feedback-buttons button {
+    padding: 10px;
     border: none;
-    font-size: 16px;
-    background: linear-gradient(45deg, #ff4e50, #f00000);
+    border-radius: 8px;
+    background: #333;
     color: white;
     cursor: pointer;
-    animation: pulse 1.5s infinite;
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7); }
-    70% { box-shadow: 0 0 0 20px rgba(255,0,0,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+.feedback-buttons button:hover {
+    background: #6e8efb;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Glow Effects -->
-<div class="glow"></div>
-<div class="glow"></div>
+<div class="glow one"></div>
+<div class="glow two"></div>
 
 <div class="container">
     <h1>🚨 Panic Button</h1>
@@ -146,6 +125,19 @@ p {
     </div>
 
     <div id="result" class="result"></div>
+
+    <!-- Feedback Section -->
+    <div id="feedback-box" class="feedback-box">
+        <p><strong>Optional Weekly Feedback Loop</strong></p>
+        <p>Did yesterday’s suggestion help you?</p>
+
+        <div class="feedback-buttons">
+            <button onclick="submitFeedback('helpful')">👍 Helpful</button>
+            <button onclick="submitFeedback('not_helpful')">👎 Not Helpful</button>
+        </div>
+
+        <p id="feedback-response" style="margin-top:10px; color:#aaa;"></p>
+    </div>
 </div>
 
 <script>
@@ -154,28 +146,42 @@ function showTip(type) {
 
     switch(type) {
         case 'screen':
-            message = "📱 Try the 20-20-20 rule. Step away and relax your eyes.";
+            message = "📱 Follow 20-20-20 rule and reduce screen exposure.";
             break;
         case 'fatigue':
-            message = "⚡ Hydrate, stretch, and take a 5-minute break.";
+            message = "⚡ Drink water, stretch, and take a short break.";
             break;
         case 'sleep':
             message = "😴 Avoid screens and get proper rest tonight.";
             break;
         case 'work':
-            message = "📋 Break your work into small tasks. Focus on one step.";
+            message = "📋 Break tasks into smaller steps.";
             break;
         case 'social':
-            message = "🤝 Call or text someone. Connection reduces stress.";
+            message = "🤝 Talk to someone or go outside.";
             break;
         case 'overthinking':
-            message = "🧠 Breathe deeply (4-7-8) or write your thoughts down.";
+            message = "🧠 Try deep breathing or journaling.";
             break;
     }
 
-    let resultBox = document.getElementById("result");
-    resultBox.style.display = "block";
-    resultBox.innerHTML = "<strong>💡 Recovery Tip:</strong><br><br>" + message;
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML =
+        "<strong>💡 Recovery Tip:</strong><br>" + message;
+
+    document.getElementById("feedback-box").style.display = "block";
+}
+
+function submitFeedback(type) {
+    let response = document.getElementById("feedback-response");
+
+    if (type === "helpful") {
+        response.innerHTML = "✅ Thanks! We'll improve similar suggestions.";
+    } else {
+        response.innerHTML = "⚠️ Noted! We'll refine future tips.";
+    }
+
+    localStorage.setItem("feedback", type);
 }
 </script>
 
