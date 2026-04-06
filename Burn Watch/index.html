@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BurnWatch - Phase 5</title>
+    <title>BurnWatch</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="welcome-screen" class="full-screen-container">
         <h1 class="brand-title">BurnWatch</h1>
         <p class="subtitle">Your personalized burnout prevention engine.</p>
@@ -20,25 +21,25 @@
             <div class="input-group">
                 <label>Biological Sex</label>
                 <select id="user-sex">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other / Prefer not to say</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other / Prefer not to say</option>
                 </select>
             </div>
 
             <div class="input-group">
                 <label>Primary Role</label>
                 <select id="user-role">
-                    <option value="student">Student (Academics)</option>
-                    <option value="working">Working Professional</option>
-                    <option value="both">Both (High Strain)</option>
+                    <option value="Student">Student (Academics)</option>
+                    <option value="Working Professional">Working Professional</option>
+                    <option value="Both">Both (High Strain)</option>
                 </select>
             </div>
 
             <div class="input-group">
-                <label>Personality Type</label>
+                <label>Personality Type (1-10)</label>
                 <input type="range" id="personality-slider" min="1" max="10" value="5">
-                <div class="slider-labels" style="margin-top: 5px;">
+                <div class="slider-labels" style="margin-top: 5px; font-size: 12px; color: #aaa; display: flex; justify-content: space-between;">
                     <span>Introvert</span>
                     <span>Ambivert</span>
                     <span>Extrovert</span>
@@ -48,72 +49,96 @@
             <button id="get-started-btn" class="btn primary full-width">Get Started</button>
         </div>
     </div>
-<div id="baseline-modal" class="modal" style="display: flex;">
+
+    <div id="baseline-modal" class="modal" style="display: none;">
         <div class="modal-content large-modal">
             <h2>Baseline Burnout Assessment</h2>
             <p>Please indicate your agreement with the following statements.</p>
-            
             <div id="olbi-questions-container" class="questions-scroll-box"></div>
-            
             <button id="submit-baseline-btn" class="btn primary" style="margin-top: 20px; width: 100%;">Submit Baseline</button>
         </div>
     </div>
-    <div id="verification-modal" class="modal">
-        <div class="modal-content">
-            <h2>Log Gap Detected</h2>
-            <p>We noticed you missed logging yesterday. Using your baseline parameters, we estimated your BurnScore is <strong>68</strong>.</p>
-            <div class="button-group">
-                <button id="confirm-btn" class="btn primary">Confirm Estimate</button>
-                <button id="edit-btn" class="btn secondary">Edit Manually</button>
-            </div>
-        </div>
-    </div>
 
-    <div class="feedback-container">
-        <h3>Suggestion Feedback</h3>
-        <p>Did the <em>20-20-20 Rule</em> help reduce your screen time stress yesterday?</p>
-        <div class="button-group">
-            <button class="btn thumb-btn" onclick="submitFeedback('helpful')">👍 Helpful</button>
-            <button class="btn thumb-btn" onclick="submitFeedback('not_helpful')">👎 Not Helpful</button>
-        </div>
-    </div>
-    <div class="dashboard-container">
+    <div class="app-layout">
         
-        <div class="score-display">
-            <h1 id="current-burn-score">68</h1>
-            <p id="risk-level">Risk: MODERATE</p>
-        </div>
+        <aside class="sidebar">
+            <h2 class="sidebar-brand">BurnWatch</h2>
+            <ul class="nav-menu">
+                <li><button class="nav-btn active" onclick="switchView('dashboard-view')">Dashboard</button></li>
+                <li><button class="nav-btn" onclick="switchView('daily-log-view')">Daily Log</button></li>
+                <li><button class="nav-btn" onclick="switchView('profile-view')">Profile</button></li>
+            </ul>
+        </aside>
 
-        <hr>
-
-        <div class="sliders-grid">
+        <main class="main-content">
             
-            <div class="slider-group">
-                <label>Mood (1-10)</label>
-                <input type="range" id="mood-slider" min="1" max="10" value="7">
-                <span id="mood-value" class="slider-value">7</span>
-            </div>
+            <section id="dashboard-view" class="view-section active">
+                <h2>Welcome back, <span id="dash-name">User</span></h2>
+                <div class="dashboard-grid">
+                    <div class="dash-card" onclick="document.getElementById('baseline-modal').style.display='flex'">
+                        <h3>📝 Baseline Assessment</h3>
+                        <p>Take the OLBI inventory.</p>
+                    </div>
+                    <div class="dash-card" onclick="switchView('daily-log-view')">
+                        <h3>📊 Log Daily Metrics</h3>
+                        <p>Update your BurnScore.</p>
+                    </div>
+                    <div class="dash-card">
+                        <h3>📈 BurnGraph</h3>
+                        <p>View your 7-day prediction.</p>
+                    </div>
+                    <div class="dash-card panic-card" onclick="alert('🚨 STRESS DETECTED: Try the 20-20-20 rule to reduce strain.')">
+                        <h3>🚨 I'm Feeling Stressed</h3>
+                        <p>Instant recovery intervention.</p>
+                    </div>
+                </div>
+            </section>
 
-            <div class="slider-group">
-                <label>Sleep (Hours)</label>
-                <input type="range" id="sleep-slider" min="0" max="12" value="7">
-                <span id="sleep-value" class="slider-value">7</span>
-            </div>
+            <section id="daily-log-view" class="view-section" style="display: none;">
+                <div class="dashboard-container">
+                    <div class="score-display">
+                        <h1 id="current-burn-score">50</h1>
+                        <p id="risk-level">Risk: MODERATE</p>
+                    </div>
+                    <hr>
+                    <div class="sliders-grid">
+                        <div class="slider-group">
+                            <label>Mood (1-10)</label>
+                            <input type="range" id="mood-slider" min="1" max="10" value="7">
+                            <span id="mood-value" class="slider-value">7</span>
+                        </div>
+                        <div class="slider-group">
+                            <label>Sleep (Hours)</label>
+                            <input type="range" id="sleep-slider" min="0" max="12" value="7">
+                            <span id="sleep-value" class="slider-value">7</span>
+                        </div>
+                        <div class="slider-group">
+                            <label>Stress (1-10)</label>
+                            <input type="range" id="stress-slider" min="1" max="10" value="3">
+                            <span id="stress-value" class="slider-value">3</span>
+                        </div>
+                        <div class="slider-group">
+                            <label>Social (1-10)</label>
+                            <input type="range" id="social-slider" min="1" max="10" value="6">
+                            <span id="social-value" class="slider-value">6</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="slider-group">
-                <label>Stress (1-10)</label>
-                <input type="range" id="stress-slider" min="1" max="10" value="3">
-                <span id="stress-value" class="slider-value">3</span>
-            </div>
+            <section id="profile-view" class="view-section" style="display: none;">
+                <h2>Your Profile</h2>
+                <div class="profile-card">
+                    <p><strong>Name:</strong> <span id="profile-name-display">--</span></p>
+                    <p><strong>Sex:</strong> <span id="profile-sex-display">--</span></p>
+                    <p><strong>Role:</strong> <span id="profile-role-display">--</span></p>
+                    <p><strong>Personality Score:</strong> <span id="profile-personality-display">--</span> / 10</p>
+                </div>
+            </section>
 
-            <div class="slider-group">
-                <label>Social (1-10)</label>
-                <input type="range" id="social-slider" min="1" max="10" value="6">
-                <span id="social-value" class="slider-value">6</span>
-            </div>
-
-        </div>
+        </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
