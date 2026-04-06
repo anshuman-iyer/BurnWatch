@@ -33,6 +33,13 @@ getStartedBtn.addEventListener('click', function() {
 });
 
 // --- NAVIGATION LOGIC ---
+// Sidebar Collapse Logic
+const sidebar = document.getElementById('app-sidebar');
+const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+
+toggleSidebarBtn.addEventListener('click', function() {
+    sidebar.classList.toggle('collapsed');
+});
 function switchView(viewId) {
     // Hide all sections
     document.querySelectorAll('.view-section').forEach(view => {
