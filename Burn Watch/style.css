@@ -289,3 +289,95 @@ input[type=range]::-webkit-slider-thumb {
     font-size: 16px;
     padding: 14px;
 }
+/* ===== FANCY HOME PAGE ===== */
+
+.logo {
+    color: #4CAF50;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    text-align: center;
+    padding: 120px 20px;
+    overflow: hidden;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    color: #bbb;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+/* Glow Button */
+.glow-btn {
+    padding: 15px 30px;
+    background: linear-gradient(45deg, #4CAF50, #6e8efb);
+    color: white;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(110, 142, 251, 0.6);
+    transition: 0.3s;
+}
+
+.glow-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(110, 142, 251, 1);
+}
+
+/* Glow Circles */
+.glow-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+}
+
+.glow-circle.one {
+    width: 300px;
+    height: 300px;
+    background: #4CAF50;
+    top: 50px;
+    left: 10%;
+}
+
+.glow-circle.two {
+    width: 300px;
+    height: 300px;
+    background: #6e8efb;
+    bottom: 50px;
+    right: 10%;
+}
+
+/* Features Upgrade */
+.feature-card {
+    background: #1e1e24;
+    padding: 30px;
+    border-radius: 16px;
+    width: 260px;
+    text-align: center;
+    border: 1px solid #333;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    border-color: #6e8efb;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* CTA Section */
+.cta {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cta h2 {
+    margin-bottom: 20px;
+}
