@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Burn Score Graph</title>
+<link rel="stylesheet" href="graph.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Firebase -->
+</head>
+
+<body>
+
+<div class="page">
+    <div class="card">
+        <div class="header">
+            <h2>Burn Score Timeline</h2>
+            <div id="predictionText" class="prediction">
+                Insufficient data to predict
+            </div>
+            <button onclick="window.location.href='index.html'" style="background: transparent; border: 1px solid #4ade80; color: #4ade80;">Back</button>
+        </div>
+
+        <canvas id="chart"></canvas>
+    </div>
+</div>
+
+<script src="graph.js"></script>
+</body>
+</html>

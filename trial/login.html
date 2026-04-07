@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BurnWatch - Login</title>
+    <link rel="stylesheet" href="login-style.css">
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="brand-title">BurnWatch</h1>
+            <p class="subtitle" id="auth-subtitle">Welcome back. Please log in.</p>
+
+            <form id="login-form" class="auth-form">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn primary full-width">Log In</button>
+                <p class="toggle-text">Don't have an account? <span onclick="toggleAuthMode()">Register here</span></p>
+            </form>
+
+            <form id="register-form" class="auth-form" style="display: none;">
+                <div class="input-group">
+                    <label>Choose a Username</label>
+                    <input type="text" id="reg-username" required>
+                </div>
+                <div class="input-group">
+                    <label>Create a Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <button type="submit" class="btn primary full-width">Create Account</button>
+                <p class="toggle-text">Already have an account? <span onclick="toggleAuthMode()">Log in here</span></p>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="login-script.js"></script>
+</body>
+</html>
