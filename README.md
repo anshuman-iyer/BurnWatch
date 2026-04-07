@@ -20,7 +20,6 @@
 * **Frontend**: HTML5, CSS3 (Custom properties, Animations)
 * **Logic**: Vanilla JavaScript (ES6+)
 * **Data Visualization**: Chart.js
-* **Persistence**: Browser LocalStorage
 
 ---
 
